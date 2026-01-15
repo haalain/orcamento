@@ -7,115 +7,104 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      background: #f4f6f8;
-      margin: 0;
-      padding: 20px;
-    }
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f6f8;
+    margin: 0;
+    padding: 20px;
+  }
 
-    .cabecalho {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 15px;
-  margin-bottom: 10px;
-}
+  .container {
+    max-width: 800px;
+    margin: auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
 
-.cabecalho img {
-  max-height: 60px;
-  max-width: 120px;
-}
+  .cabecalho {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 10px;
+  }
 
-.cabecalho h1 {
-  margin: 0;
-  color: #0E3D4C;
-  font-size: 26px;
-}
+  .cabecalho img {
+    max-height: 60px;
+    max-width: 120px;
+  }
 
-    .container {
-      max-width: 800px;
-      margin: auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
+  .cabecalho h1 {
+    margin: 0;
+    color: #0E3D4C;
+    font-size: 26px;
+  }
 
-    <div class="cabecalho">
-    <img src="URL_DA_LOGO_AQUI" alt="Logo do Laboratório">
-    <h1>Orçamento de Exames</h1>
-    </div>
+  .data {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #555;
+  }
 
-    .data {
-      text-align: center;
-      margin-bottom: 20px;
-      color: #555;
-    }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    font-size: 14px;
+  }
 
-    th, td {
-      border: 1px solid #ddd;
-      padding: 8px;
-      font-size: 14px;
-    }
+  th {
+    background: #0E3D4C;
+    color: #fff;
+  }
 
-    th {
-      background: #0E3D4C;
-      color: #fff;
-    }
+  .totais {
+    margin-top: 20px;
+    text-align: right;
+    font-size: 16px;
+  }
 
-    .totais {
-      margin-top: 20px;
-      text-align: right;
-      font-size: 16px;
-    }
+  .btn {
+    margin-top: 30px;
+    width: 100%;
+    padding: 12px;
+    background: #1E88E5;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+  }
 
-    .totais div {
-      margin-top: 5px;
-    }
-
+  @media print {
     .btn {
-      margin-top: 30px;
-      width: 100%;
-      padding: 12px;
-      background: #1E88E5;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-      cursor: pointer;
+      display: none;
     }
-
-    .btn:hover {
-      background: #1565C0;
+    body {
+      background: #fff;
     }
-
-    .erro {
-      color: red;
-      text-align: center;
-      margin-top: 20px;
-    }
-
-    @media print {
-      .btn {
-        display: none;
-      }
-      body {
-        background: #fff;
-      }
-    }
-  </style>
+  }
+</style>
+  
 </head>
 
 <body>
 
+  <div class="container">
 
+    <div class="cabecalho">
+      <img src="URL_DA_LOGO_AQUI" alt="Logo do Laboratório">
+      <h1>Orçamento de Exames</h1>
+    </div>
+
+    <div class="data" id="dataOrcamento"></div>
 
     <table id="tabelaExames">
       <thead>
@@ -136,56 +125,9 @@
     <button class="btn" onclick="window.print()">Imprimir / Salvar em PDF</button>
 
     <div class="erro" id="erro"></div>
+
   </div>
 
-  <script>
-    function carregarOrcamento() {
-      const params = new URLSearchParams(window.location.search);
-      const dataParam = params.get('data');
-
-      if (!dataParam) {
-        document.getElementById('erro').innerText =
-          'Nenhum orçamento encontrado.';
-        return;
-      }
-
-      let dados;
-
-      try {
-        dados = JSON.parse(decodeURIComponent(dataParam));
-      } catch (e) {
-        document.getElementById('erro').innerText =
-          'Erro ao carregar o orçamento.';
-        return;
-      }
-
-      document.getElementById('dataOrcamento').innerText =
-        'Data: ' + dados.data;
-
-      const tbody = document.querySelector('#tabelaExames tbody');
-      tbody.innerHTML = '';
-
-      dados.exames.forEach(exame => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${exame.nome}</td>
-          <td>R$ ${Number(exame.preco).toFixed(2)}</td>
-        `;
-        tbody.appendChild(tr);
-      });
-
-      document.getElementById('total').innerText =
-        Number(dados.total).toFixed(2);
-
-      document.getElementById('desconto').innerText =
-        Number(dados.desconto).toFixed(2);
-
-      document.getElementById('totalFinal').innerText =
-        Number(dados.totalFinal).toFixed(2);
-    }
-
-    carregarOrcamento();
-  </script>
-
 </body>
+  
 </html>
