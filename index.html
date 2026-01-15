@@ -71,6 +71,20 @@
     font-size: 16px;
   }
 
+  .aviso-validade {
+    text-align: center;
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 20px;
+  }
+
+    .rodape {
+  margin-top: 30px;
+  font-size: 11px;
+  color: #777;
+  text-align: center;
+}
+
   .btn {
     margin-top: 30px;
     width: 100%;
@@ -108,6 +122,10 @@
 
     <div class="data" id="dataOrcamento"></div>
 
+    <div class="aviso-validade">
+        Orçamento válido por <strong>7 dias</strong> após a data de emissão.
+     </div>
+
     <table id="tabelaExames">
       <thead>
         <tr>
@@ -123,7 +141,11 @@
       <div><strong>Desconto:</strong> R$ <span id="desconto"></span></div>
       <div><strong>Total Final:</strong> R$ <span id="totalFinal"></span></div>
     </div>
-
+    
+    <div class="rodape">
+  * Valores sujeitos a alteração após o prazo de validade do orçamento.
+    </div>
+    
     <button class="btn" onclick="window.print()">Imprimir / Salvar em PDF</button>
 
     <div class="erro" id="erro"></div>
