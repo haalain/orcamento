@@ -153,6 +153,60 @@
 
   </div>
 
+
+  <script>
+  function carregarOrcamento() {
+    const params = new URLSearchParams(window.location.search);
+    const dataParam = params.get('data');
+
+    if (!dataParam) {
+      document.getElementById('erro').innerText =
+        'Nenhum orçamento encontrado.';
+      return;
+    }
+
+    let dados;
+
+    try {
+      dados = JSON.parse(decodeURIComponent(dataParam));
+    } catch (e) {
+      document.getElementById('erro').innerText =
+        'Erro ao carregar o orçamento.';
+      return;
+    }
+
+    // DATA
+    document.querySelector('.data').innerText =
+      'Data: ' + dados.data;
+
+    // TABELA
+    const tbody = document.querySelector('#tabelaExames tbody');
+    tbody.innerHTML = '';
+
+    dados.exames.forEach(exame => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${exame.nome}</td>
+        <td>R$ ${Number(exame.preco).toFixed(2)}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    // TOTAIS
+    document.getElementById('total').innerText =
+      Number(dados.total).toFixed(2);
+
+    document.getElementById('desconto').innerText =
+      Number(dados.desconto).toFixed(2);
+
+    document.getElementById('totalFinal').innerText =
+      Number(dados.totalFinal).toFixed(2);
+  }
+
+  carregarOrcamento();
+</script>
+
+
 </body>
   
 </html>
